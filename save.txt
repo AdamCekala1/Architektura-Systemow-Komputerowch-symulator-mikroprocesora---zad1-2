@@ -1,0 +1,6 @@
+1 ADD rCXh 66
+2 ADD rCXh 66
+3 SUB rCXh 4
+4 SUB rCXh 4
+5 MOV rCXh rCXh
+6 MOV rCXh rCXh

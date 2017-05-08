@@ -1,139 +1,140 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'C:\Users\Adam\Desktop\ask_gui\ask.ui'
-#
-# Created by: PyQt5 UI code generator 5.4.1
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
+
 class Ui_Form(object):
+
+
+
+    # ********************************************
+    # Tworzenie klasy "Rejestr"
+    # ********************************************
     class Rejestr():
-        wartosc = 0
-        wartoscL = 0
-        imie = ""
-
-
         def zwrocWartosc(self):
-            return self.wartosc
-
-
+            return self.value
         def __init__(self, imie_rej):
-                self.imie = imie_rej
-                self.wartosc = 0
-
-
-        def grajImie(self):
-            return self.imie
-
-
-        def odejmnij(self, wart, ktoraCzesc):
-            if (ktoraCzesc == "H"):
-                liczba = self.zmienDlaH(wart)
+            self.nazwa = imie_rej
+            self.value = 0
+        def sub(self, value, LH):
+            self.value = self.value - value
+            if self.value < 0:
+                self.value = abs(self.value)
+        def mov(self, value, LH):
+            if LH == "L":
+                self.value = self.value + value
             else:
-                self.wartoscL = wart
-                liczba = wart
-            self.wartosc = self.wartosc - liczba
-            if self.wartosc < 0:
-                self.wartosc = abs(self.wartosc)
+                self.value = value
+        def add(self, value,LH):
+            self.value = self.value + value
+
+    # ********************************************
+    # Tworzenie Rejestrow A,B,C,D
+    # ********************************************
+    def createRejestrs(self):
+        rejestA = self.Rejestr("A")
+        rejestB = self.Rejestr("B")
+        rejestC = self.Rejestr("C")
+        rejestD = self.Rejestr("D")
+        return rejestA,rejestB,rejestC,rejestD
 
 
-        def przesun(self, wart, lCzyH):
-            self.wartosc = self.wartosc - self.wartoscL
-            if lCzyH == "L":
-                self.wartoscL = wart
-                self.wartosc = self.wartosc + self.wartoscL
-            else:
-                self.wartosc = wart
+    # ********************************************
+    # Tworzenie tabeli rejestrow
+    # ********************************************
+    def createTabOfRejestr(self,createRejestrs):
+        rejestA, rejestB, rejestC, rejestD = createRejestrs()
+        tabRejestow = []
+        tabRejestow.append(rejestA)
+        tabRejestow.append(rejestB)
+        tabRejestow.append(rejestC)
+        tabRejestow.append(rejestD)
+        return rejestA, rejestB, rejestC, rejestD, tabRejestow
 
 
-        def add2(self, wart, ktoraCzesc):
-            if (ktoraCzesc == "L"):
-                self.wartoscL = self.wartoscL + wart
-                if self.wartoscL > 255:
-                    self.wartoscL = self.wartoscL%255
-                self.wartosc = self.wartosc + wart
-            if(ktoraCzesc == "H"):
-                liczba = self.zmienDlaH(wart)
-                self.wartosc = self.wartosc + liczba
-            if self.wartosc >65535 :
-                self.wartosc = abs(65535 - self.wartosc)
+    # ********************************************
+    # Sprawdzanie czy rejestr jest A,B,C,D oraz czy jest L,H
+    # ********************************************
+    def sprawdzRejestrABCD(self,rej):
+        if(str(rej)=="rAXh"):
+            return self.rejestA,"H"
+        elif(str(rej)=="rAXl"):
+            return self.rejestA,"L"
+        elif(str(rej)=="rBXh"):
+            return self.rejestB,"H"
+        elif(str(rej)=="rBXl"):
+            return self.rejestB,"L"
+        elif(str(rej)=="rCXh"):
+            return self.rejestC,"H"
+        elif(str(rej)=="rCXl"):
+            return self.rejestC,"L"
+        elif(str(rej)=="rDXh"):
+            return self.rejestD,"H"
+        elif(str(rej)=="rDXl"):
+            return self.rejestD,"L"
 
+    # ********************************************
+    # Praca krokowa
+    # ********************************************
 
-        def zmienDlaH(self, wartosc):
-            slownik = {9:256, 8:512, 7:1024, 6:2048, 5:4096, 4:8192, 3:16384, 2:32768}
-            sting = str(bin(wartosc))
-            liczba = 0
+    def uruchomPracaKrokowa(self):
 
-            for i in range(2, sting.__len__()):
-                if int(sting[i]) == 1:
-                    liczba = liczba + slownik.get(i)
-            return liczba
-    def interpretujPracaKrok(self):
-
-
-        slownikRej = {"rAXh": self.rejestA, "rAXl": self.rejestA, "rBXh": self.rejestB, "rBXl": self.rejestB, "rCXh": self.rejestC, "rCXl": self.rejestC, "rDXh": self.rejestD, "rDXl": self.rejestD }
-        slownikMlodosci = {"rAXh": "H", "rAXl": "L", "rBXh": "H", "rBXl": "L", "rCXh": "H", "rCXl": "L", "rDXh":"H", "rADl": "L" }
-
-        sting = self.tekst
         rozkaz = ""
-        rejA = ""
-        rejB = ""
+        rej1 = ""
+        rej2 = ""
         licz = 0
-        numer = "0"
-        ii = self.iPracaKrok + 1
+        ii = self.krokPK + 1
+        krok=self.krok
+        kontrola = self.krokConsole2
+        self.krokConsole2=self.krokConsole2+1
+        # self.tekst.__len__() ilosc znakow w tekscie
+        for i in range(ii, self.tekst.__len__()):
 
-        for i in range(ii, sting.__len__()):
-            if sting[i].isspace():
+            if self.tekst[i].isspace():
                 licz = licz+1
-
-            if licz == 0 and sting[i].isdigit():
-                    numer = sting[i]
             if licz == 1:
-                if not(sting[i].isspace() or sting[i].isdigit()):
-                    rozkaz = rozkaz + (sting[i])
+                if not(self.tekst[i].isspace() or self.tekst[i].isdigit()):
+                    rozkaz = rozkaz + (self.tekst[i])
             if licz == 2:
-                if not(sting[i].isspace() or sting[i].isdigit()):
-                    rejA = rejA + (sting[i])
+                if not(self.tekst[i].isspace() or self.tekst[i].isdigit()):
+                    rej1 = rej1 + (self.tekst[i])
             if licz == 3:
-                if not(sting[i].isspace()):
-                    rejB = rejB + (sting[i])
+                if not(self.tekst[i].isspace()):
+                    rej2 = rej2 + (self.tekst[i])
             if licz == 4:
-                self.iPracaKrok = i
-                rejestr = slownikRej.get(rejA)
+                self.krokPK = i
+                rejestr,LHrej1 = self.sprawdzRejestrABCD(rej1)
                 dodaj = 0
-                if rejB.isdigit():
-                    dodaj = rejB
+                if rej2.isdigit():
+                    dodaj = rej2
                 else:
-                    dodajR = slownikRej.get(rejB)
-                    dodaj = dodajR.zwrocWartosc()
+                    dodajR,LHrej2 = self.sprawdzRejestrABCD(rej2)
+                    dodaj = dodajR.value
 
                 if rozkaz == "ADD":
-                    lCzyH = slownikMlodosci.get(rejA)
-                    #rejestr.dodaj(int(dodaj))
-                    rejestr.add2(int(dodaj), slownikMlodosci.get(rejA))
+                    rejestr.add(int(dodaj),LHrej1)
                 if rozkaz == "SUB":
-                    lCzyH = slownikMlodosci.get(rejA)
-                    rejestr.odejmnij(int(dodaj), lCzyH)
+                    rejestr.sub(int(dodaj), LHrej1)
                 if rozkaz == "MOV":
-                    lCzyH = slownikMlodosci.get(rejA)
-                    rejestr.przesun(int(dodaj), lCzyH)
-                tekst = numer + " Rejestr " + rejestr.grajImie() + "  " + str(rejestr.zwrocWartosc()) +"\n"
-                self.ui.textBrowser_2.setText(tekst)
+                    rejestr.mov(int(dodaj), LHrej1)
+                self.tekstConsole2 = self.tekstConsole2+ (str(self.krokConsole2) + " Rejestr " + rejestr.nazwa + "  " + str(rejestr.value) +"\n")
+                self.textBrowser_2.setText(self.tekstConsole2)
                 break
+        if ii == 1 and licz == 0 and abs(self.krokConsole2-kontrola)==0:
+            self.krokConsole2 = 0
 
 
-    def interpretuj(self):
+    # ********************************************
+    # Praca calkowita
+    # ********************************************
+    def uruchomPracaCalkowita(self):
 
-        slownikRej = {"rAXh": self.rejestA, "rAXl": self.rejestA, "rBXh": self.rejestB, "rBXl": self.rejestB, "rCXh": self.rejestC, "rCXl": self.rejestC, "rDXh": self.rejestD, "rDXl": self.rejestD }
-        slownikMlodosci = {"rAXh": "H", "rAXl": "L", "rBXh": "H", "rBXl": "L", "rCXh": "H", "rCXl": "L", "rDXh":"H", "rADl": "L" }
 
         sting = self.tekst
         rozkaz = ""
-        rejA = ""
-        rejB = ""
+        rej1 = ""
+        rej2 = ""
         licz = 0
+
         for i in range(sting.__len__()):
             if sting[i].isspace():
                 licz = licz+1
@@ -143,138 +144,208 @@ class Ui_Form(object):
                     rozkaz = rozkaz + (sting[i])
             if licz == 2:
                 if not(sting[i].isspace() or sting[i].isdigit()):
-                    rejA = rejA + (sting[i])
+                    rej1 = rej1 + (sting[i])
             if licz == 3:
                 if not(sting[i].isspace()):
-                    rejB = rejB + (sting[i])
+                    rej2 = rej2 + (sting[i])
             if licz == 4:
-
-                rejestr = slownikRej.get(rejA)
+                rejestr, LHrej1 = self.sprawdzRejestrABCD(rej1)
                 dodaj = 0
-                if rejB.isdigit():
-                    dodaj = rejB
+                if rej2.isdigit():
+                    dodaj = rej2
                 else:
-                    dodajR = slownikRej.get(rejB)
-                    dodaj = dodajR.zwrocWartosc()
-
+                    dodajR, LHrej2 = self.sprawdzRejestrABCD(rej2)
+                    dodaj = dodajR.value
                 if rozkaz == "ADD":
-                    lCzyH = slownikMlodosci.get(rejA)
-                    rejestr.add2(int(dodaj), slownikMlodosci.get(rejA))
+                    rejestr.add(int(dodaj), LHrej1)
                 if rozkaz == "SUB":
-                    lCzyH = slownikMlodosci.get(rejA)
-                    rejestr.odejmnij(int(dodaj), lCzyH)
+                    rejestr.sub(int(dodaj), LHrej1)
                 if rozkaz == "MOV":
-                    lCzyH = slownikMlodosci.get(rejA)
-                    rejestr.przesun((dodaj), lCzyH)
+                    rejestr.mov((dodaj), LHrej1)
 
                 rozkaz= ""
-                rejA = ""
-                rejB = ""
+                rej1 = ""
+                rej2 = ""
                 licz = 0
 
         tekst = ""
         for i in range(4):
-            tekst = tekst + "Rejestr " + self.tabRejestow[i].grajImie() + "  " + str(self.tabRejestow[i].zwrocWartosc()) +"\n"
+            tekst = tekst + "Rejestr " + self.tabRejestow[i].nazwa + "  " + str(self.tabRejestow[i].value) +"\n"
 
-        self.ui.textBrowser_2.setText(tekst)
+        self.textBrowser_2.setText(tekst)
+        self.rejestA.value = 0
+        self.rejestB.value = 0
+        self.rejestC.value = 0
+        self.rejestD.value = 0
 
 
-    def wpisz(self):
-        self.tekst = open('instrukcje.txt').read()
-        self.ui.textBrowser.setText(self.tekst)
-        self.i = int(open('i.txt').read())
+
+
+
+
+    # ********************************************
+    # CZYTANIE Z PLIKU
+    # ********************************************
+
+    def czytaj(self):
+        self.tekst = open('save.txt').read()
+        self.textBrowser.setText(self.tekst)
+        self.krok = int(open('ilosc_krokow.txt').read())
+        self.tekstConsole2 = ""
+        self.textBrowser_2.setText(self.tekstConsole2)
+        self.krokConsole2 = 0
+        self.krokPK = 0
+        self.rejestA.value = 0
+        self.rejestB.value = 0
+        self.rejestC.value = 0
+        self.rejestD.value = 0
+
+
+
+    # ********************************************
+    # ZAPIS DO PLIKU
+    # ********************************************
+
 
     def zapisz(self):
-        plik = open('instrukcje.txt', 'w')
+        plik = open('save.txt', 'w')
         plik.write(self.tekst)
         plik.close()
-        plik = open('i.txt', 'w')
-        plik.write(str(self.i))
+        plik = open('ilosc_krokow.txt', 'w')
+        plik.write(str(self.krok))
         plik.close()
 
 
-    def rozwiazuj(self):
-        komenda = False
-        rejestr1 = False
-        rejestr2 = False
-        tekst = ""
-        if self.ui.ADD.isChecked():
+
+
+    # ********************************************
+    # ADD/SUB/MOV
+    # ********************************************
+    def Add_Sub_Mov(self,tekst):
+        if self.ADD.isChecked():
             tekst = tekst + "ADD "
             komenda = True
-        if self.ui.SUB.isChecked():
+        elif self.SUB.isChecked():
             tekst = tekst + "SUB "
             komenda = True
-        if self.ui.MOV.isChecked():
+        elif self.MOV.isChecked():
             tekst = tekst + "MOV "
             komenda = True
+        else:
+            self.textBrowser_2.setText("ERROR: Trzeba wybrac ADD lub SUB lub MOV")
+            komenda = False
+        return komenda,tekst
 
-        if self.ui.AXH.isChecked():
+    # ********************************************
+    # Rejestr1
+    # ********************************************
+    def rej1(self,tekst):
+        if self.AXH.isChecked():
             tekst = tekst + "rAXh "
             rejestr1 = True
-        if self.ui.AXL.isChecked():
+        elif self.AXL.isChecked():
             tekst = tekst + "rAXl "
             rejestr1 = True
-        if self.ui.BXH.isChecked():
+        elif self.BXH.isChecked():
             tekst = tekst + "rBXh "
             rejestr1 = True
-        if self.ui.BXL.isChecked():
+        elif self.BXL.isChecked():
             tekst = tekst + "rBXl "
             rejestr1 = True
-        if self.ui.CXH.isChecked():
+        elif self.CXH.isChecked():
             tekst = tekst + "rCXh "
             rejestr1 = True
-        if self.ui.CXL.isChecked():
+        elif self.CXL.isChecked():
             tekst = tekst + "rCXl "
             rejestr1 = True
-        if self.ui.DXH.isChecked():
+        elif self.DXH.isChecked():
             tekst = tekst + "rDXh "
             rejestr1 = True
-        if self.ui.DXL.isChecked():
+        elif self.DXL.isChecked():
             tekst = tekst + "rDXl "
             rejestr1 = True
+        else:
+            self.textBrowser_2.setText("ERROR: Nie wybrano nic w rejestrze 1")
+            rejestr1 = False
+        return rejestr1, tekst
+    # ********************************************
+    # Rejestr2
+    # ********************************************
 
-
-        if self.ui.AXH_2.isChecked():
+    def rej2(self,tekst):
+        if self.AXH_2.isChecked():
             tekst = tekst + "rAXh"
             rejestr2 = True
-        if self.ui.AXL_2.isChecked():
+            self.rejestr2HL = 'H'
+        elif self.AXL_2.isChecked():
             tekst = tekst + "rAXl"
             rejestr2 = True
-        if self.ui.BXH_2.isChecked():
+        elif self.BXH_2.isChecked():
             tekst = tekst + "rBXh"
             rejestr2 = True
-        if self.ui.BXL_2.isChecked():
+        elif self.BXL_2.isChecked():
             tekst = tekst + "rBXl"
             rejestr2 = True
-        if self.ui.CXH_2.isChecked():
+        elif self.CXH_2.isChecked():
             tekst = tekst + "rCXh"
             rejestr2 = True
-        if self.ui.CXL_2.isChecked():
+        elif self.CXL_2.isChecked():
             tekst = tekst + "rCXl"
             rejestr2 = True
-        if self.ui.DXH_2.isChecked():
+        elif self.DXH_2.isChecked():
             tekst = tekst + "rDXh"
             rejestr2 = True
-        if self.ui.DXL_2.isChecked():
+        elif self.DXL_2.isChecked():
             tekst = tekst + "rDXl"
             rejestr2 = True
-        if self.ui.DXL_3.isChecked():
-            tekst = tekst + str(self.ui.horizontalSlider.value())
+        elif self.liczba.isChecked():
+            tekst = tekst + str(self.textEdit.toPlainText())
             rejestr2 = True
-
-        if self.ui.MOV.isChecked() and self.ui.DXL_3.isChecked():
-            self.ui.textBrowser_2.setText("Niepoprawna komenda!")
+        else:
+            self.textBrowser_2.setText("ERROR: Nie wybrano nic w rejestrze 2")
+            rejestr2 = False
+        return rejestr2, tekst
+    # ********************************************
+    # Tworzenie lini komendy
+    # ********************************************
+    def komenda(self):
+        tekst = ""
+        # ADD SUB MOV
+        komenda,tekst = self.Add_Sub_Mov(tekst)
+        # Rejestr 1
+        rejestr1, tekst = self.rej1(tekst)
+        # Rejestr 2
+        rejestr2, tekst = self.rej2(tekst)
+        # Obsluga bledu
+        if self.MOV.isChecked() and self.liczba.isChecked():
+            self.textBrowser_2.setText("ERROR: Nie można użyć MOV wraz z liczba!")
         else:
             if(komenda and rejestr1 and rejestr2):
-                self.ui.textBrowser_2.setText("")
-                tekst = str(self.i)+ " " + tekst
-                self.i = self.i + 1
+                # self.textBrowser_2.setText("")
+                tekst = str(self.krok)+ " " + tekst
+                self.krok = self.krok + 1
                 self.tekst = self.tekst + tekst +"\n"
-                self.ui.textBrowser.setText(self.tekst)
-            else:
-                self.ui.textBrowser_2.setText("Niepoprawna komenda!")
+                self.textBrowser.setText(self.tekst)
+
+
 
     def setupUi(self, Form):
+
+        # *********************************************
+        # Inicjalizacja zmiennych
+        # **********************************************
+        self.tekstConsole2 = "" #tekst w kosoli 2
+        self.krok=1
+        self.krokConsole2=0
+        self.krokPK = 0
+        self.tekst= ''
+        self.rejestA, self.rejestB, self.rejestC, self.rejestD,self.tabRejestow = self.createTabOfRejestr(self.createRejestrs)
+
+        # *********************************************
+        # GUI - grafika
+        # **********************************************
+
+
         Form.setObjectName("Form")
         Form.resize(700, 739)
         Form.setStyleSheet("QWidget{\n"
@@ -321,6 +392,37 @@ class Ui_Form(object):
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+        self.frame_2 = QtWidgets.QFrame(Form)
+        self.frame_2.setGeometry(QtCore.QRect(10, 100, 451, 80))
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.frame_3 = QtWidgets.QFrame(Form)
+        self.frame_3.setGeometry(QtCore.QRect(10, 190, 451, 80))
+        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.frame_4 = QtWidgets.QFrame(Form)
+        self.frame_4.setGeometry(QtCore.QRect(470, 10, 221, 121))
+        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setObjectName("frame_4")
+        self.frame_5 = QtWidgets.QFrame(Form)
+        self.frame_5.setGeometry(QtCore.QRect(10, 280, 681, 191))
+        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_5.setObjectName("frame_5")
+        self.frame_6 = QtWidgets.QFrame(Form)
+        self.frame_6.setGeometry(QtCore.QRect(10, 550, 681, 181))
+        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_6.setObjectName("frame_6")
+        self.frame_7 = QtWidgets.QFrame(Form)
+        self.frame_7.setGeometry(QtCore.QRect(470, 140, 221, 131))
+        self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_7.setObjectName("frame_7")
+        # Rejestr 1
         self.DXH = QtWidgets.QRadioButton(self.frame)
         self.DXH.setGeometry(QtCore.QRect(320, 50, 41, 17))
         self.DXH.setObjectName("DXH")
@@ -348,11 +450,7 @@ class Ui_Form(object):
         self.BXH = QtWidgets.QRadioButton(self.frame)
         self.BXH.setGeometry(QtCore.QRect(120, 50, 41, 17))
         self.BXH.setObjectName("BXH")
-        self.frame_2 = QtWidgets.QFrame(Form)
-        self.frame_2.setGeometry(QtCore.QRect(10, 100, 451, 80))
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
+        # Rejestr 2
         self.DXH_2 = QtWidgets.QRadioButton(self.frame_2)
         self.DXH_2.setGeometry(QtCore.QRect(320, 50, 41, 17))
         self.DXH_2.setObjectName("DXH_2")
@@ -380,92 +478,82 @@ class Ui_Form(object):
         self.BXH_2 = QtWidgets.QRadioButton(self.frame_2)
         self.BXH_2.setGeometry(QtCore.QRect(120, 50, 41, 17))
         self.BXH_2.setObjectName("BXH_2")
-        self.frame_3 = QtWidgets.QFrame(Form)
-        self.frame_3.setGeometry(QtCore.QRect(10, 190, 451, 80))
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
+        self.liczba = QtWidgets.QRadioButton(self.frame_2)
+        self.liczba.setGeometry(QtCore.QRect(150, 20, 41, 17))
+        self.liczba.setObjectName("liczba")
+        # zadanie
         self.MOV = QtWidgets.QRadioButton(self.frame_3)
         self.MOV.setGeometry(QtCore.QRect(30, 20, 82, 41))
         self.MOV.setObjectName("MOV")
         self.SUB = QtWidgets.QRadioButton(self.frame_3)
         self.SUB.setGeometry(QtCore.QRect(180, 20, 82, 41))
         self.SUB.setObjectName("SUB")
-
-        # QtCore.QObject.connect(self.ui.DODAJ, QtCore.SIGNAL("clicked()"), self.rozwiazuj)
-        # QtCore.QObject.connect(self.ui.ZapiszZm, QtCore.SIGNAL("clicked()"), self.zapisz)
-        # QtCore.QObject.connect(self.ui.Wpisz, QtCore.SIGNAL("clicked()"), self.wpisz)
-        # QtCore.QObject.connect(self.ui.Graj, QtCore.SIGNAL("clicked()"), self.interpretuj)
-        # QtCore.QObject.connect(self.ui.PracaKrok, QtCore.SIGNAL("clicked()"), self.interpretujPracaKrok)
-
-
         self.ADD = QtWidgets.QRadioButton(self.frame_3)
         self.ADD.setGeometry(QtCore.QRect(330, 20, 82, 41))
         self.ADD.setObjectName("ADD")
-        self.frame_4 = QtWidgets.QFrame(Form)
-        self.frame_4.setGeometry(QtCore.QRect(470, 10, 221, 121))
-        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
         self.label_3 = QtWidgets.QLabel(self.frame_4)
         self.label_3.setGeometry(QtCore.QRect(20, 20, 71, 31))
         self.label_3.setObjectName("label_3")
+        # liczba
         self.textEdit = QtWidgets.QTextEdit(self.frame_4)
         self.textEdit.setGeometry(QtCore.QRect(20, 70, 171, 31))
         self.textEdit.setObjectName("textEdit")
-        self.lcdNumber = QtWidgets.QLCDNumber(self.frame_4)
-        self.lcdNumber.setGeometry(QtCore.QRect(110, 30, 64, 23))
-        self.lcdNumber.setObjectName("lcdNumber")
-        self.frame_5 = QtWidgets.QFrame(Form)
-        self.frame_5.setGeometry(QtCore.QRect(10, 280, 681, 191))
-        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_5.setObjectName("frame_5")
+        # wyswietlanie - 1 konsola
         self.textBrowser = QtWidgets.QTextBrowser(self.frame_5)
         self.textBrowser.setGeometry(QtCore.QRect(10, 10, 451, 171))
         self.textBrowser.setObjectName("textBrowser")
-        self.start = QtWidgets.QPushButton(self.frame_5)
-        self.start.setGeometry(QtCore.QRect(490, 10, 171, 171))
-        self.start.setObjectName("start")
-        self.frame_6 = QtWidgets.QFrame(Form)
-        self.frame_6.setGeometry(QtCore.QRect(10, 550, 681, 181))
-        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_6.setObjectName("frame_6")
+        # wyswietlanie - 2 konsola
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.frame_6)
         self.textBrowser_2.setGeometry(QtCore.QRect(10, 10, 451, 161))
         self.textBrowser_2.setObjectName("textBrowser_2")
-        self.czytaj = QtWidgets.QPushButton(self.frame_6)
-        self.czytaj.setGeometry(QtCore.QRect(490, 10, 171, 161))
-        self.czytaj.setObjectName("czytaj")
-        self.frame_7 = QtWidgets.QFrame(Form)
-        self.frame_7.setGeometry(QtCore.QRect(470, 140, 221, 131))
-        self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_7.setObjectName("frame_7")
+        # start
+        self.start = QtWidgets.QPushButton(self.frame_5)
+        self.start.setGeometry(QtCore.QRect(490, 10, 171, 171))
+        self.start.setObjectName("start")
+        # czytaj z pliku
+        self.open = QtWidgets.QPushButton(self.frame_6)
+        self.open.setGeometry(QtCore.QRect(490, 10, 171, 161))
+        self.open.setObjectName("czytaj")
+        # Praca:
+        ## krokowa
         self.krokowa = QtWidgets.QPushButton(self.frame_7)
         self.krokowa.setGeometry(QtCore.QRect(20, 20, 181, 41))
         self.krokowa.setObjectName("krokowa")
+        ## calosciowa
         self.calosciowa = QtWidgets.QPushButton(self.frame_7)
         self.calosciowa.setGeometry(QtCore.QRect(20, 70, 181, 41))
         self.calosciowa.setObjectName("calosciowa")
+        # zapisz do pliku
         self.save = QtWidgets.QPushButton(Form)
         self.save.setGeometry(QtCore.QRect(10, 480, 681, 61))
         self.save.setObjectName("save")
 
-        self.ADD.clicked.connect(self.rozwiazuj)
+        # *********************************************
+        # Events handlers
+        # **********************************************
+
+
+        self.krokowa.clicked.connect(self.uruchomPracaKrokowa)
+        self.calosciowa.clicked.connect(self.uruchomPracaCalkowita)
+        self.start.clicked.connect(self.komenda)
         self.save.clicked.connect(self.zapisz)
+        self.open.clicked.connect(self.czytaj)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
+
+    # *********************************************
+    # NAZWY W BUTTONACH/LABELACH
+    # **********************************************
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.DXH.setText(_translate("Form", "DXH"))
+        self.liczba.setText(_translate("Form", "Liczba"))
         self.CXL.setText(_translate("Form", "CXL"))
         self.DXL.setText(_translate("Form", "DXL"))
-        self.label.setText(_translate("Form", "Rejestr A"))
+        self.label.setText(_translate("Form", "Rejestry 1"))
         self.AXH.setText(_translate("Form", "AXH"))
         self.AXL.setText(_translate("Form", "AXL"))
         self.CXH.setText(_translate("Form", "CXH"))
@@ -474,7 +562,7 @@ class Ui_Form(object):
         self.DXH_2.setText(_translate("Form", "DXH"))
         self.CXL_2.setText(_translate("Form", "CXL"))
         self.DXL_2.setText(_translate("Form", "DXL"))
-        self.label_2.setText(_translate("Form", "Rejestr B"))
+        self.label_2.setText(_translate("Form", "Rejestry 2"))
         self.AXH_2.setText(_translate("Form", "AXH"))
         self.AXL_2.setText(_translate("Form", "AXL"))
         self.CXH_2.setText(_translate("Form", "CXH"))
@@ -484,8 +572,8 @@ class Ui_Form(object):
         self.SUB.setText(_translate("Form", "SUB"))
         self.ADD.setText(_translate("Form", "ADD"))
         self.label_3.setText(_translate("Form", "LICZBA"))
-        self.start.setText(_translate("Form", "Start"))
-        self.czytaj.setText(_translate("Form", "CZYTAJ"))
+        self.start.setText(_translate("Form", "Dodaj"))
+        self.open.setText(_translate("Form", "CZYTAJ"))
         self.krokowa.setText(_translate("Form", "Praca Krokowa"))
         self.calosciowa.setText(_translate("Form", "Praca Całościowa"))
         self.save.setText(_translate("Form", "ZAPISZ PROGRAM"))
