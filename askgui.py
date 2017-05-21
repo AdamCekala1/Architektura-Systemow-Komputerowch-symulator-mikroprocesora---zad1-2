@@ -95,12 +95,13 @@ class Ui_Form(object):
         self.krokConsole2=self.krokConsole2+1
         # self.tekst.__len__() ilosc znakow w tekscie
         for i in range(ii, self.tekst.__len__()):
-
             if self.tekst[i].isspace():
                 licz = licz+1
             if licz == 1:
+                print(self.tekst[i])
                 if not(self.tekst[i].isspace() or self.tekst[i].isdigit() or (self.tekst[i] == "a" or self.tekst[i] == "c" or self.tekst[i] == "," )):
                     rozkaz = rozkaz + (self.tekst[i])
+                    print(rozkaz)
                     if rozkaz == "int":
                         rozkaz = rozkaz + self.tekst[i+1] + self.tekst[i+2]  + self.tekst[i+3] + self.tekst[i+4]
                         if self.tekst[i+5] and not (self.tekst[i+5].isspace()):
@@ -109,39 +110,52 @@ class Ui_Form(object):
                 if not(self.tekst[i].isspace() or self.tekst[i].isdigit()):
                     rej1 = rej1 + (self.tekst[i])
             if licz == 3:
-                if not(self.tekst[i].isspace()):
+                if not(self.tekst[i].isspace() ):
                     rej2 = rej2 + (self.tekst[i])
             if licz == 4:
                 rejestrNazwa = ""
                 rejestrWartosc = 0
                 typeAction = " Rejestr "
                 self.krokPK = i
+                dodaj = 0
+                # licz = 0
                 if rozkaz == "ADD" or rozkaz == "SUB" or rozkaz == "MOV":
                     rejestr,LHrej1 = self.sprawdzRejestrABCD(rej1)
-                    dodaj = 0
                     if rej2.isdigit():
                         dodaj = rej2
                     else:
                         dodajR,LHrej2 = self.sprawdzRejestrABCD(rej2)
                         dodaj = dodajR.value
+                    if rozkaz == "ADD":
+                        rejestr.add(int(dodaj), LHrej1)
+                    if rozkaz == "SUB":
+                        rejestr.sub(int(dodaj), LHrej1)
+                    if rozkaz == "MOV":
+                        rejestr.mov(int(dodaj), LHrej1)
                     rejestrNazwa = rejestr.nazwa
                     rejestrWartosc = rejestr.value
                 else:
-                    typeAction = " Przerwanie "+ rozkaz
+                    typeAction =rozkaz
 
-                if rozkaz == "ADD":
-                    rejestr.add(int(dodaj),LHrej1)
-                elif rozkaz == "SUB":
-                    rejestr.sub(int(dodaj), LHrej1)
-                elif rozkaz == "MOV":
-                    rejestr.mov(int(dodaj), LHrej1)
+                if rozkaz == "PUSH":
+                    rejestr, LHrej1 = self.sprawdzRejestrABCD(rej1)
+                    self.STOS.append(rejestr)
+                    rejestrNazwa = rejestr.nazwa
+                    print("nazwa" + str(rejestrNazwa))
+
+                if rozkaz == "POP":
+                    print("wchodzimy w pop")
+                    rejestr = self.STOS.pop()
+                    rejestrNazwa = rejestr.nazwa
+                    print("nazwa"+str(rejestrNazwa))
+
 
                 elif rozkaz == "int21,2c" :
                     self.int2cFun()
                 elif rozkaz == "int21,0" :
                     self.int0Fun()
-                elif rozkaz == "int21,39" :
-                    self.int39Fun()
+                elif rozkaz == "int21,2h" :
+                    self.int2hFun()
                 elif rozkaz == "int21,3a":
                     self.int3aFun()
                 elif rozkaz == "int21,41":
@@ -153,10 +167,11 @@ class Ui_Form(object):
                 elif rozkaz == "int2139":
                     self.int39hFun()
 
+                print("rozkaz"+str(rozkaz))
                 if rejestrWartosc != 0:
-                    self.tekstConsole2 = self.tekstConsole2+ (str(self.krokConsole2) + typeAction + rejestrNazwa + "  " + str(rejestrWartosc) +"\n")
+                    self.tekstConsole2 = self.tekstConsole2+ (str(self.krokConsole2) +" "+ typeAction +" "+ rejestrNazwa + "  " + str(rejestrWartosc) +"\n")
                 else:
-                    self.tekstConsole2 = self.tekstConsole2 + (str(self.krokConsole2) + typeAction + rejestrNazwa + "\n")
+                    self.tekstConsole2 = self.tekstConsole2 + (str(self.krokConsole2) +" "+ typeAction +" "+ rejestrNazwa + "\n")
                 self.textBrowser_2.setText(self.tekstConsole2)
                 break
         if ii == 1 and licz == 0 and abs(self.krokConsole2-kontrola)==0:
@@ -178,7 +193,7 @@ class Ui_Form(object):
             if sting[i].isspace():
                 licz = licz+1
             if licz == 1:
-                if not(sting[i].isspace() or sting[i].isdigit() or (sting[i] == "a" or sting[i] == "c" or sting[i] == "," )):
+                if not(sting[i].isspace() or sting[i].isdigit() or (sting[i] == "a" or sting[i] == "c"or sting[i] == "h" or sting[i] == "," )):
                     rozkaz = rozkaz + (sting[i])
                     if rozkaz == "int":
                         rozkaz = rozkaz + sting[i+1] + sting[i+2]  + sting[i+3] + sting[i+4]
@@ -189,7 +204,7 @@ class Ui_Form(object):
                     if not(sting[i].isspace() or sting[i].isdigit()):
                         rej1 = rej1 + (sting[i])
             if licz == 3:
-                if not(sting[i].isspace()):
+                if not(sting[i].isspace() ):
                     rej2 = rej2 + (sting[i])
 
             elif licz == 4:
@@ -212,16 +227,16 @@ class Ui_Form(object):
                     rejestr.mov((dodaj), LHrej1)
                 elif rozkaz == "PUSH":
                     print('push')
-                elif rozkaz == "PULL":
-                    print('pull')
+                elif rozkaz == "POP":
+                    print('POP')
                 # if rozkaz == "int21,0":
                 #     print('int21,0')
                 elif rozkaz == "int21,2c" :
                     self.int2cFun()
                 elif rozkaz == "int21,0" :
                     self.int0Fun()
-                elif rozkaz == "int21,39" :
-                    self.int39Fun()
+                elif rozkaz == "int21,2h" :
+                    self.int2hFun()
                 elif rozkaz == "int21,3a":
                     self.int3aFun()
                 elif rozkaz == "int21,41":
@@ -382,6 +397,17 @@ class Ui_Form(object):
     # ********************************************
     # Przerwania
     # ********************************************
+
+    def pushFun(self):
+        print("push")
+    def pullFun(self):
+        print("pull")
+
+
+    def int2hFun(self):
+        # wyswietlenie znaku
+        self.przerwT2.setText(self.int2hText)
+        print("dzieje sie")
     def int0Fun(self):
         # Zakończenie programu
         sys.exit(app.exec_())
@@ -451,18 +477,23 @@ class Ui_Form(object):
 
         elif (self.push.isChecked()):
             if(rejestr1):
-                tekst = str(self.krok)  + " PUSH " + str(tekst)
+                self.pushed = True
+                tekst = str(self.krok)  + " " + "PUSH"+" " + str(tekst) + "."
                 self.krok = self.krok + 1
                 self.tekst = self.tekst + tekst + "\n"
                 self.textBrowser.setText(self.tekst)
             else:
                 self.textBrowser_2.setText("ERROR: Pusty rejestr")
+
         elif (self.pop.isChecked()):
-            tekst = "pop"
-            tekst = str(self.krok) + " " + tekst + " "
-            self.krok = self.krok + 1
-            self.tekst = self.tekst + tekst + "\n"
-            self.textBrowser.setText(self.tekst)
+            if(self.pushed == True):
+                tekst = "POP"
+                tekst = str(self.krok) + " " + tekst + " . ."
+                self.krok = self.krok + 1
+                self.tekst = self.tekst + tekst + "\n"
+                self.textBrowser.setText(self.tekst)
+            else:
+                self.textBrowser_2.setText("ERROR: STOS PUSTY")
         elif (self.int0.isChecked()):
             tekst = "int21,0"
             tekst = str(self.krok) + " " + tekst+ " . ."
@@ -476,8 +507,9 @@ class Ui_Form(object):
             self.krok = self.krok + 1
             self.tekst = self.tekst + tekst + "\n"
             self.textBrowser.setText(self.tekst)
-        elif (self.int39.isChecked()):
-            tekst = "int21,39"
+        elif (self.int2h.isChecked()):
+            tekst = "int21,2h"
+            self.int2hText = self.przerwT1.toPlainText()
             tekst = str(self.krok) + " " + tekst + " . ."
             self.krok = self.krok + 1
             self.tekst = self.tekst + tekst + "\n"
@@ -538,6 +570,7 @@ class Ui_Form(object):
 
 
         # **************************************
+        self.pushed = False
         self.tekstConsole2 = "" #tekst w kosoli 2
         self.krok=1
         self.krokConsole2=0
@@ -745,9 +778,9 @@ class Ui_Form(object):
         self.int2c = QtWidgets.QRadioButton(self.frame_3)
         self.int2c.setGeometry(QtCore.QRect(180, 120, 82, 41))
         self.int2c.setObjectName("int2c")
-        self.int39 = QtWidgets.QRadioButton(self.frame_3)
-        self.int39.setGeometry(QtCore.QRect(320, 120, 82, 41))
-        self.int39.setObjectName("int39")
+        self.int2h = QtWidgets.QRadioButton(self.frame_3)
+        self.int2h.setGeometry(QtCore.QRect(320, 120, 82, 41))
+        self.int2h.setObjectName("int2h")
         self.int3a = QtWidgets.QRadioButton(self.frame_3)
         self.int3a.setGeometry(QtCore.QRect(20, 170, 82, 41))
         self.int3a.setObjectName("int3a")
@@ -835,7 +868,7 @@ class Ui_Form(object):
         self.pop.setText(_translate("Form", "POP"))
         self.int0.setText(_translate("Form", "INT 21,0"))
         self.int2c.setText(_translate("Form", "INT 21,2C"))
-        self.int39.setText(_translate("Form", "INT 21,39"))
+        self.int2h.setText(_translate("Form", "INT 21,2h"))
         self.int3a.setText(_translate("Form", "INT 21,3A"))
         self.int41.setText(_translate("Form", "INT 21,41"))
         self.int47.setText(_translate("Form", "INT 21,47"))
