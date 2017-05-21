@@ -1,6 +1,4 @@
-1 ADD rCXh 66
-2 ADD rCXh 66
-3 SUB rCXh 4
-4 SUB rCXh 4
-5 MOV rCXh rCXh
-6 MOV rCXh rCXh
+1 int2c
+2 int47
+3 int3a
+4 int0

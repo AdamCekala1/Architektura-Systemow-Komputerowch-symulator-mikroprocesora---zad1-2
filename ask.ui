@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>739</height>
+    <width>703</width>
+    <height>957</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -320,61 +320,6 @@ border-color:#424f6d;
     </property>
    </widget>
   </widget>
-  <widget class="QFrame" name="frame_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>190</y>
-     <width>451</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QRadioButton" name="MOV">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>82</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>MOV</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="SUB">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>20</y>
-      <width>82</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>SUB</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="ADD">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>20</y>
-      <width>82</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ADD</string>
-    </property>
-   </widget>
-  </widget>
   <widget class="QFrame" name="frame_4">
    <property name="geometry">
     <rect>
@@ -428,7 +373,7 @@ border-color:#424f6d;
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>490</y>
      <width>681</width>
      <height>191</height>
     </rect>
@@ -467,7 +412,7 @@ border-color:#424f6d;
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>550</y>
+     <y>760</y>
      <width>681</width>
      <height>181</height>
     </rect>
@@ -548,7 +493,7 @@ border-color:#424f6d;
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>480</y>
+     <y>690</y>
      <width>681</width>
      <height>61</height>
     </rect>
@@ -556,6 +501,253 @@ border-color:#424f6d;
    <property name="text">
     <string>ZAPISZ PROGRAM</string>
    </property>
+  </widget>
+  <widget class="QFrame" name="frame_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>451</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QRadioButton" name="MOV">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>MOV</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="SUB">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>20</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SUB</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="ADD">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>20</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ADD</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="push">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>70</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PUSH</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="pop">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>70</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>POP</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int0">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,0</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int2c">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>120</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,2C</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int39">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>120</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,39</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int3a">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>170</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,3A</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int41">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>170</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,41</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int47">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>170</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,47</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int56">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>220</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,56</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="int9">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>220</y>
+      <width>82</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>INT 21,9</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_8">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>280</y>
+     <width>221</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QTextEdit" name="przerwT1">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>50</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="przerwT2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Główny wpis do przerwania:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pomocniczy wpis do przerwania:</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
